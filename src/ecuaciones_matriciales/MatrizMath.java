@@ -5,11 +5,11 @@ import java.util.Scanner;
 
 public class MatrizMath implements Cloneable {
 
-	private Integer dimension;      //dimensi�n
-	private Double[][] matriz;//Matriz
+	private Integer dimension; //Dimension de la matriz
+	private Double[][] matriz; //Matriz
 	private Integer fila;
 	private Integer columna;
-	static Scanner teclado= new Scanner(System.in);
+	//static Scanner teclado = new Scanner(System.in);
 
 	//Constructor Matriz Cuadrada
 	public MatrizMath(Integer dimension) {
@@ -20,7 +20,7 @@ public class MatrizMath implements Cloneable {
 		for(int i=0; i<this.getDimension(); i++){
 			for(int j=0; j<this.getDimension(); j++){
 				matriz[i][j]=0.0;
-			}//Fin inicializaci�n de Matriz Cuadrada
+			}//Fin inicializacion de Matriz Cuadrada
 		}
 	}
 
@@ -40,7 +40,7 @@ public class MatrizMath implements Cloneable {
 		for(int i=0; i<this.getFila(); i++){
 			for(int j=0; j<this.getColumna(); j++){
 				matriz[i][j]=0.0;
-			}//Fin inicializaci�n de Matriz 
+			}//Fin inicializacion de Matriz 
 		}
 	}
 
@@ -81,9 +81,9 @@ public class MatrizMath implements Cloneable {
 
 	//Cargar Matriz()
 	public void cargarMatriz(){
-		System.out.println("Matriz de dimensi�n (" + this.getFila() + "x" + this.getColumna() + ")");
+		System.out.println("Matriz de dimension (" + this.getFila() + "x" + this.getColumna() + ")");
 		System.out.println((this.getFila()==this.getColumna())?"Matriz Cuadrada":"Matriz NO Cuadrada");
-		System.out.println("  Ingrese elementos a cargar: ");
+		System.out.println(" Ingrese elementos a cargar: ");
 		for(int i=0; i<matriz.length;i++){
 			for(int j=0; j<matriz[i].length; j++){
 				System.out.print("fila [" + i + "] columna [" + j + "] :");    			
