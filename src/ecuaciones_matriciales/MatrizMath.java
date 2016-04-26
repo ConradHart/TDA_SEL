@@ -9,7 +9,7 @@ public class MatrizMath implements Cloneable {
 	private Double[][] matriz; //Matriz
 	private Integer fila;
 	private Integer columna;
-	//static Scanner teclado = new Scanner(System.in);
+	static Scanner teclado = new Scanner(System.in);
 
 	//Constructor Matriz Cuadrada
 	public MatrizMath(Integer dimension) {
