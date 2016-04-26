@@ -76,6 +76,7 @@ public class Archivo {
 					}
 				
 			}
+			
 			System.out.println("Vector: ["+ eElemento+"]");
 			System.out.println("Fin de lectura...");
 			
