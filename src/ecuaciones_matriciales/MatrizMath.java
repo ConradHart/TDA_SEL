@@ -9,7 +9,7 @@ public class MatrizMath implements Cloneable {
 	private Double[][] matriz; //Matriz
 	private Integer fila;
 	private Integer columna;
-	static Scanner teclado = new Scanner(System.in);
+	//static Scanner teclado = new Scanner(System.in);
 
 	//Constructor Matriz Cuadrada
 	public MatrizMath(Integer dimension) {
@@ -27,7 +27,7 @@ public class MatrizMath implements Cloneable {
 	//Constructor a partir de una Matriz Cuadrada
 	public MatrizMath(Double[][] otraMatriz) {
 		this.matriz=otraMatriz;//Copia a matriz, la Matriz otraMatriz
-		this.setDimension(otraMatriz.length);//Cargo dimensi�n
+		this.setDimension(otraMatriz.length);//Cargo dimension
 		this.setFila(dimension);
 		this.setColumna(dimension);
 	}
@@ -43,6 +43,7 @@ public class MatrizMath implements Cloneable {
 			}//Fin inicializacion de Matriz 
 		}
 	}
+
 
 	/////////////////////////////////////////
 	//Getters y Setters
@@ -79,17 +80,23 @@ public class MatrizMath implements Cloneable {
 	}
 	////////////////////////////////////////////////////////
 
-	//Cargar Matriz()
-	public void cargarMatriz(){
-		System.out.println("Matriz de dimension (" + this.getFila() + "x" + this.getColumna() + ")");
-		System.out.println((this.getFila()==this.getColumna())?"Matriz Cuadrada":"Matriz NO Cuadrada");
-		System.out.println(" Ingrese elementos a cargar: ");
-		for(int i=0; i<matriz.length;i++){
-			for(int j=0; j<matriz[i].length; j++){
-				System.out.print("fila [" + i + "] columna [" + j + "] :");    			
-				matriz[i][j]=teclado.nextDouble();
-			}
-		}
+	//Cargar Matriz() desde teclado
+//	public void cargarMatriz(){
+//		System.out.println("Matriz de dimension (" + this.getFila() + "x" + this.getColumna() + ")");
+//		System.out.println((this.getFila()==this.getColumna())?"Matriz Cuadrada":"Matriz NO Cuadrada");
+//		System.out.println(" Ingrese elementos a cargar: ");
+//		for(int i=0; i<matriz.length;i++){
+//			for(int j=0; j<matriz[i].length; j++){
+//				System.out.print("fila [" + i + "] columna [" + j + "] :");    			
+//				matriz[i][j]=teclado.nextDouble();
+//			}
+//		}
+//
+//	}//fin cargar
+	
+	//Cargar Matriz desde archivo
+	public void cargarMatrizArchivo(Integer iFila, Integer jColumna, Double eElemento){
+				matriz[iFila][jColumna]=eElemento;
 
 	}//fin cargar
 
@@ -104,7 +111,7 @@ public class MatrizMath implements Cloneable {
 	}
 	
 	public void imprimirMatriz(){
-		System.out.println("\nMatriz cargada:");
+		System.out.println("\nMatriz cargada: ");
 		for(int i=0; i<this.getFila();i++){
 			for(int j=0; j<this.getColumna(); j++){
 				System.out.print(matriz[i][j] + " ");
@@ -113,7 +120,7 @@ public class MatrizMath implements Cloneable {
 		}
 	}//fin imprimir
 
-	//Clonaci�n de la Matriz
+	//Clonacion de la Matriz
 	public Object clone(){
 		MatrizMath obj=null;
 		try{
@@ -129,8 +136,8 @@ public class MatrizMath implements Cloneable {
 		return obj;
 	}
 
-	//M�TODOS
-	//C�lculo de la traza: sumatoria de los elementos de la "Diagonal"
+	//METODOS
+	//Calculo de la traza: sumatoria de los elementos de la "Diagonal"
 	Double traza(){
 		if(this.getFila()==this.getColumna()){
 			double tr=0.0;
@@ -143,7 +150,7 @@ public class MatrizMath implements Cloneable {
 	}
 
 	//suma de dos matrices
-	//static: lo llamo desde Matriz. M�todo de clase.
+	//static: lo llamo desde Matriz. Metodo de clase.
 	static MatrizMath suma(MatrizMath a, MatrizMath b){
 		if((a.getFila()==b.getFila())&&(a.getColumna()==b.getColumna())){
 			MatrizMath matrizSuma=new MatrizMath(a.dimension);//Llama al constructor que pide "dimension".
@@ -317,7 +324,7 @@ public class MatrizMath implements Cloneable {
 						}
 					}
 				}
-				//c�lculo de las inc�gnitas, elementos de la matriz inversa
+				//calculo de las incognitas, elementos de la matriz inversa
 				for(int j=0; j<dimAux; j++){
 					matrizInversa.matriz[dimAux-1][j]=matrizIdentidad.matriz[dimAux-1][j]/matrizAux.matriz[dimAux-1][dimAux-1];
 					for(int i=dimAux-2; i>=0; i--){
@@ -333,6 +340,7 @@ public class MatrizMath implements Cloneable {
 		}else{System.out.println("No es una matriz cuadrada. No puede calcularse su Inversa");
 		return null;}
 	}
+	
 
 
 	//matriz traspuesta

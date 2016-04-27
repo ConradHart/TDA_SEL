@@ -34,14 +34,15 @@ public class Archivo {
 			Long lNumeroLineas = new Long(l1);
 			Long lNumeroLineaFinMatriz = new Long(l2);
 			Long lNumeroLineaFinVector = new Long(l3);
-			
+			Integer posVector = 0; //Posicion del Vector
 			System.out.println("Leyendo matriz del archivo...");
 			MatrizMath Matriz = null;
 			VectorMath Vector = null;
-			//VectorMath Vector = new VectorMath(3); //vector columna de términos independientes. 
+
 			String iFila = "";
 			String jColumna = "";
 			String eElemento = "";
+			
 			
 			while ((linea = br.readLine()) != null){ //Primera lectura obtiene la dimension de la matriz y vector			
 				lNumeroLineas++; //Contador de Lineas la primera lectura
@@ -51,25 +52,33 @@ public class Archivo {
 						lNumeroLineaFinMatriz = (long) (Integer.parseInt(linea)*(Integer.parseInt(linea)));//Numero de linea de fin elementos de la matriz
 						lNumeroLineaFinVector = lNumeroLineaFinMatriz + Integer.parseInt(linea);
 						PrimeraLinea = false;
-						Matriz = new MatrizMath(Integer.parseInt(linea)); //Dimension de la matriz
-						Vector = new VectorMath(Integer.parseInt(linea)); //Dimension del Vector
+						
+						Matriz = new MatrizMath(Integer.parseInt(linea)); //Dimensiono la matriz
+						Vector = new VectorMath(Integer.parseInt(linea)); //Dimension el Vector
 						System.out.println("Matriz: ");
 						
 					}else{
-						if(lNumeroLineas <= lNumeroLineaFinMatriz){ //Elementos de la matriz nxn
-
+						
+						if(lNumeroLineas <= lNumeroLineaFinMatriz){ //Elementos de la matriz nxn	
 							linea = linea.replace(" ","");
 							iFila = linea.substring(0, 1);
 							jColumna = linea.substring(1, 2);
 							eElemento = linea.substring(2, 3);
 							
+							//Cargo matriz leida
+							Matriz.cargarMatrizArchivo(Integer.parseInt(iFila),Integer.parseInt(jColumna), Double.parseDouble(eElemento));
+							
 							System.out.println("Elemento i["+ iFila + "] j["+ jColumna +"]: " + eElemento);
 							
 							eElemento = "";
 						}else{ //Elementos del vector
-							if(lNumeroLineas <= lNumeroLineaFinVector){ //Elementos de la matriz nxn
+							if(lNumeroLineas <= lNumeroLineaFinVector){ //Elementos del vector
 								linea = linea.replace(" ","");
 								eElemento = eElemento + linea;
+								
+								//Cargo el vector leido
+								Vector.cargarVectorArchivo(posVector, Double.parseDouble(eElemento));
+								posVector++;
 								
 							}
 						}
@@ -79,6 +88,21 @@ public class Archivo {
 			
 			System.out.println("Vector: ["+ eElemento+"]");
 			System.out.println("Fin de lectura...");
+			
+			Matriz.imprimirMatriz();
+			Vector.imprimirVector();
+			
+			//Copiar esta matriz generada en la clase archivo a la clase MatrizMath para luego en test
+			//usar los metodos de MatrizMath como inversa, ya que la clase Archivo no los conoce
+
+			//Como copiar una matriz?
+//			//Constructor a partir de una Matriz Cuadrada 
+//			public MatrizMath(Double[][] otraMatriz) {
+//				this.matriz=otraMatriz;//Copia a matriz, la Matriz otraMatriz
+//				this.setDimension(otraMatriz.length);//Cargo dimension
+//				this.setFila(dimension);
+//				this.setColumna(dimension);
+//			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -93,6 +117,8 @@ public class Archivo {
 		}
 
 	}
+	
+
 
 	public void escribir() {
 		FileWriter fichero = null;
@@ -116,4 +142,6 @@ public class Archivo {
 			}
 		}
 	}
+	
+
 }

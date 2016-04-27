@@ -13,16 +13,22 @@ public class VectorMath {
 	    	vector[i]=0.0;
 	}
 
-	public void cargarVector(){
-		System.out.println("Tama�o del vector = " + dimensionVector);
-		for(int i=0; i<vector.length; i++){
-		    System.out.println("Ingrese elemento [" + i + "] = " );	
-			vector[i]=MatrizMath.teclado.nextDouble();
-		}
+	//Cargar vector desde teclado
+//	public void cargarVector(){
+//		System.out.println("Tama�o del vector = " + dimensionVector);
+//		for(int i=0; i<vector.length; i++){
+//		    System.out.println("Ingrese elemento [" + i + "] = " );	
+//			vector[i]=MatrizMath.teclado.nextDouble();
+//		}
+//	}
+	
+	//Cargar Vector desde archivo
+	public void cargarVectorArchivo(Integer cCoordenada, Double cComponente){
+		vector[cCoordenada]=cComponente;
 	}
 	
 	public void imprimirVector(){
-		System.out.println("Vector: ");
+		System.out.println("\nVector cargado: ");
 		for(int i=0; i<vector.length; i++)
 			System.out.println(vector[i] + " ");
 	}
