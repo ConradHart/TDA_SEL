@@ -1,15 +1,11 @@
 package ecuaciones_matriciales;
 
-
-import java.util.Scanner;
-
 public class MatrizMath implements Cloneable {
 
 	private Integer dimension; //Dimension de la matriz
 	private Double[][] matriz; //Matriz
 	private Integer fila;
 	private Integer columna;
-	//static Scanner teclado = new Scanner(System.in);
 
 	//Constructor Matriz Cuadrada
 	public MatrizMath(Integer dimension) {
@@ -26,90 +22,45 @@ public class MatrizMath implements Cloneable {
 
 	//Constructor a partir de una Matriz Cuadrada
 	public MatrizMath(Double[][] otraMatriz) {
-		this.matriz=otraMatriz;//Copia a matriz, la Matriz otraMatriz
+		this.setMatriz(otraMatriz);//Copia a matriz, la Matriz otraMatriz
 		this.setDimension(otraMatriz.length);//Cargo dimension
 		this.setFila(dimension);
 		this.setColumna(dimension);
 	}
-
-	//Constructor de Matriz No Cuadrada
-	public MatrizMath(Integer fila, Integer columna) {
-		this.setFila(fila);
-		this.setColumna(columna);
-		this.setMatriz(new Double[fila][columna]);
-		for(int i=0; i<this.getFila(); i++){
-			for(int j=0; j<this.getColumna(); j++){
-				matriz[i][j]=0.0;
-			}//Fin inicializacion de Matriz 
-		}
-	}
-
 
 	/////////////////////////////////////////
 	//Getters y Setters
 	public Integer getDimension() {
 		return dimension;
 	}
-
 	public void setDimension(Integer dimension) {
 		this.dimension = dimension;
 	}
-
 	public Double[][] getMatriz() {
 		return matriz;
 	}
-
 	public void setMatriz(Double[][] matriz) {
 		this.matriz = matriz;
 	}
-
 	public Integer getFila() {
 		return fila;
 	}
-
 	public void setFila(Integer fila) {
 		this.fila = fila;
 	}
-
 	public Integer getColumna() {
 		return columna;
 	}
-
 	public void setColumna(Integer columna) {
 		this.columna = columna;
 	}
 	////////////////////////////////////////////////////////
 
-	//Cargar Matriz() desde teclado
-//	public void cargarMatriz(){
-//		System.out.println("Matriz de dimension (" + this.getFila() + "x" + this.getColumna() + ")");
-//		System.out.println((this.getFila()==this.getColumna())?"Matriz Cuadrada":"Matriz NO Cuadrada");
-//		System.out.println(" Ingrese elementos a cargar: ");
-//		for(int i=0; i<matriz.length;i++){
-//			for(int j=0; j<matriz[i].length; j++){
-//				System.out.print("fila [" + i + "] columna [" + j + "] :");    			
-//				matriz[i][j]=teclado.nextDouble();
-//			}
-//		}
-//
-//	}//fin cargar
-	
 	//Cargar Matriz desde archivo
 	public void cargarMatrizArchivo(Integer iFila, Integer jColumna, Double eElemento){
 				matriz[iFila][jColumna]=eElemento;
-
 	}//fin cargar
 
-	public MatrizMath matrizIdentidad(){
-		MatrizMath mIdent = new MatrizMath(this.dimension);
-		for(int i=0; i<this.getDimension(); i++){
-			for(int j=0; j<this.getDimension(); j++){
-				mIdent.matriz[i][i]=1.0;
-			}//Fin inicializaciï¿½n de Matriz Cuadrada
-	       }
-		return mIdent;
-	}
-	
 	public void imprimirMatriz(){
 		System.out.println("\nMatriz cargada: ");
 		for(int i=0; i<this.getFila();i++){
@@ -120,217 +71,248 @@ public class MatrizMath implements Cloneable {
 		}
 	}//fin imprimir
 
-	//Clonacion de la Matriz
+	/** Imprime un numero real, formateado con 4 decimales, sin cambiar de linea.
+	 * Es ecesario para que todas las filas de la matriz queden uniformes.
+	 * @param d Numero que se imprimira
+	 */
+	public void imprimeElemento(double d) {
+		System.out.print( String.format("%1$+01.4g", d) + " ");
+	}
+
+
+	/**    
+	 * Imprime una matriz por pantalla.
+	 * Imprime una fila en cada linea. En cada fila, imprime el borde izquierdo ("|"), 
+	 * luego cada uno de los elementos de la fila y, finalmente el borde derecho ("|").
+	 * La matriz aparece rodeada por sendas lineas en blanco arriba y abajo.
+	 * Por ejemplo:
+	 * <pre>
+	 * |+1.000 +2.000 +3.000 +4.000 |
+	 * |+5.000 +3.000 -2.000 +1.000 |
+	 * |+2.000 +7.000 +4.000 +3.250 |
+	 * |-2.000 -3.142 +7.300 +1.333 |
+	 * </pre>
+	 */
+	public void imprime() {
+
+		String borde = "|";
+
+		System.out.println(); // Imprime una linea en blanco al principio
+		for (int i=0; i<this.getDimension(); i++) {
+			System.out.print(borde); // Imprime el borde izquierdo sin cambiar de linea
+			Double[] filai = this.getMatriz()[i];
+			for (int j=0; j<filai.length; j++) {
+				imprimeElemento(this.getMatriz()[i][j]); // Imprime el elemento i,j sin cambiar de linea
+			}            
+			System.out.print(borde); // Imprime el borde derecho
+			System.out.println(); // Salta a una nueva linea
+		}
+		System.out.println(); // Imprime una linea en blanco al final
+	}//fin imprime
+
+	//Clonación de la Matriz
 	public Object clone(){
 		MatrizMath obj=null;
 		try{
 			obj=(MatrizMath)super.clone();
 		}catch(CloneNotSupportedException ex){
-			System.out.println(" No se puede duplicar");
+			System.out.println("Objeto NO se puede Clonar");
 		}
-		//aquï¿½ estï¿½ la clave  para clonar la matriz bidimensional
-		obj.matriz=(Double[][])obj.matriz.clone();
-		for(int i=0; i<obj.matriz.length; i++){
-			obj.matriz[i]=(Double[])obj.matriz[i].clone();
+		//aquí está la clave  para clonar la matriz bidimensional
+		obj.matriz=(Double[][])obj.getMatriz().clone();
+		for(int i=0; i<obj.getDimension(); i++){
+			obj.getMatriz()[i]=(Double[])obj.getMatriz()[i].clone();
 		}
 		return obj;
 	}
 
-	//METODOS
-	//Calculo de la traza: sumatoria de los elementos de la "Diagonal"
-	Double traza(){
-		if(this.getFila()==this.getColumna()){
-			double tr=0.0;
-			for(int i=0; i<dimension; i++){
-				tr+=matriz[i][i];
-			}
-			return tr;
-		}else{System.out.println("No es una matriz cuadrada. No puede calcularse su Traza");
-		return null;}
-	}
+	/////////////************//PRODUCTO MATRIZ POR ESCALAR//****************//////////////
 
-	//suma de dos matrices
-	//static: lo llamo desde Matriz. Metodo de clase.
-	static MatrizMath suma(MatrizMath a, MatrizMath b){
-		if((a.getFila()==b.getFila())&&(a.getColumna()==b.getColumna())){
-			MatrizMath matrizSuma=new MatrizMath(a.dimension);//Llama al constructor que pide "dimension".
-			for(int i=0; i<a.dimension; i++){
-				for(int j=0; j<a.dimension; j++){
-					matrizSuma.matriz[i][j]=a.matriz[i][j]+b.matriz[i][j];
-				}
-			}
-			return matrizSuma;
-		}else{System.out.println("Las matrices no tienen el mismo \"orden\". No puede calcularse su Suma");
-		return null;}
-	}
-
-	//resta de dos matrices
-	//static: lo llamo desde Matriz. Mï¿½todo de clase.
-//	static MatrizMath resta(MatrizMath a, MatrizMath b){
-//		if((a.getFila()==b.getFila())&&(a.getColumna()==b.getColumna())){
-//			MatrizMath matrizResta=new MatrizMath(a.dimension);//Llama al constructor que pide "dimension".
-//			for(int i=0; i<a.dimension; i++){
-//				for(int j=0; j<a.dimension; j++){
-//					matrizResta.matriz[i][j]=a.matriz[i][j]-b.matriz[i][j];
-//				}
-//			}
-//			return matrizResta;
-//		}else{System.out.println("Las matrices no tienen el mismo \"orden\". No puede calcularse su Resta");
-//		return null;}
-//	}
-
-	public MatrizMath resta(MatrizMath b){
-		if((this.getFila()==b.getFila())&&(this.getColumna()==b.getColumna())){
-			MatrizMath matrizResta=new MatrizMath(this.dimension);//Llama al constructor que pide "dimension".
-			for(int i=0; i<this.dimension; i++){
-				for(int j=0; j<this.dimension; j++){
-					matrizResta.matriz[i][j]=this.matriz[i][j]-b.matriz[i][j];
-				}
-			}
-			return matrizResta;
-		}else{System.out.println("Las matrices no tienen el mismo \"orden\". No puede calcularse su Resta");
-		return null;}
-	}
-
-	
-	
-	//producto de dos matrices
-	//static: lo llamo desde Matriz. Mï¿½todo de clase.
-//	static MatrizMath productoEntreMatrices(MatrizMath a, MatrizMath b){
-//		if(a.getColumna()==b.getFila()){
-//			MatrizMath matrizProducto=new MatrizMath(a.dimension);
-//			for(int i=0; i<a.dimension; i++){
-//				for(int j=0; j<a.dimension; j++){
-//					for(int k=0; k<a.dimension; k++){
-//						matrizProducto.matriz[i][j]+=a.matriz[i][k]*b.matriz[k][j];
-//					}
-//				}
-//			}
-//			return matrizProducto;
-//		}else{System.out.println("No es una matriz cuadrada. No puede calcularse su Producto");
-//		return null;}
-//	}
-
-	public MatrizMath productoEntreMatrices(MatrizMath b){
-		if(this.getColumna()==b.getFila()){
-			MatrizMath matrizProducto=new MatrizMath(this.dimension);
-			for(int i=0; i<this.dimension; i++){
-				for(int j=0; j<this.dimension; j++){
-					for(int k=0; k<this.dimension; k++){
-						matrizProducto.matriz[i][j]+=this.matriz[i][k]*b.matriz[k][j];
-					}
-				}
-			}
-			return matrizProducto;
-		}else{System.out.println("No es una matriz cuadrada. No puede calcularse su Producto");
-		return null;}
-	}
-	
-	
-	
-	
-	static VectorMath sistemaEcuacionesLineales(MatrizMath matrizInversa, VectorMath terminosIndep){
-		VectorMath vectorIncognitas= new VectorMath(terminosIndep.getDimensionVector());
-		for(int i=0; i<matrizInversa.getDimension(); i++){
-			for(int j=0; j<matrizInversa.getDimension(); j++){
-				vectorIncognitas.getVector()[i]+=matrizInversa.matriz[i][j]*terminosIndep.getVector()[j];
-			}
-		}
-
-		return vectorIncognitas;
-	}
-
-
-	//producto de una matriz por una escalar
-	//static: lo llamo desde Matriz. Mï¿½todo de clase.
-	static MatrizMath productoPorEscalar(MatrizMath a, double alfa){
-		MatrizMath matrizEscalar=new MatrizMath(a.dimension);
-		for(int i=0; i<a.dimension; i++){
-			for(int j=0; j<a.dimension; j++){
-				matrizEscalar.matriz[i][j]=a.matriz[i][j]*alfa;
+	public MatrizMath productoPorEscalar(Double alfa){
+		MatrizMath matrizEscalar=new MatrizMath(this.getDimension());
+		for(int i=0; i<this.getDimension(); i++){
+			for(int j=0; j<this.getDimension(); j++){
+				matrizEscalar.getMatriz()[i][j]=this.getMatriz()[i][j]*alfa;
 			}
 		}
 		return matrizEscalar;
 	}
 
-	//producto de un vector fila por una matriz da un vector fila (1xn) (nxn)= (1xn)
-	public VectorMath productoVecFilPorMatriz(VectorMath vectorFila, MatrizMath a){
-		VectorMath vectorAuxFil=new VectorMath(vectorFila.getDimensionVector());
-		int n=vectorFila.getDimensionVector();  //dimensiï¿½n
-		for(int i=0; i<n; i++){
-			for(int j=0; j<n; j++){
-				vectorAuxFil.getVector()[i]+=vectorFila.getVector()[j]*a.matriz[j][i];
+	////////////***************//DETERMINANTE//************************///////////////////	
+	/**
+	 * Menor complementario de un elemento en la matriz.
+	 * @param ni Fila del elemento cuyo menor complementario se quiere obtener
+	 * @param nj Columna del elemento cuyo menor complementario se quiere obtener
+	 * @return Menor complementario del elemento ni, nj de la matriz original.
+	 * Se trata de una matriz igual que la original pero de la que se han eliminado la fila ni y 
+	 * la columna nj.
+	 */
+	public MatrizMath complementaria(int ni, int nj) {
+		if (this.getFila()>0 && this.getColumna()>0) {        
+			MatrizMath resultado = new MatrizMath(this.getDimension()-1);
+			for (int i=0, ri=0; ri<this.getFila()-1; i++, ri++) {
+				if (i==ni) {
+					i++;
+				}
+				for (int j=0, rj=0; rj<this.getColumna()-1; j++, rj++) {
+					if (j==nj) {
+						j++;
+					}
+					resultado.getMatriz()[ri][rj] = this.getMatriz()[i][j];
+				}
 			}
-		}
-		return vectorAuxFil;
-	}
-	//producto de una matriz por un vector columna (nxn) (nx1)= (nx1)
-	static VectorMath productoVecColPorMatriz(MatrizMath a, VectorMath vectorColumna){
-		int n=vectorColumna.getDimensionVector();  //dimensiï¿½n
-		VectorMath vectorAuxCol= new VectorMath(n);
-		for(int i=0; i<n; i++){
-			for(int j=0; j<n; j++){
-				vectorAuxCol.getVector()[i]+=a.matriz[i][j]*vectorColumna.getVector()[j];
-			}
-		}
-		return vectorAuxCol;
+			return resultado;
+		} else return null;
 	}
 
-	//determinante de una matriz: funciï¿½n que a cada matriz le asigna un nï¿½ real
-	Double determinante(){
+	/**
+	 * Determinante de una matriz. Se supone la matriz cuadrada.
+	 * El determinante de una matriz se calcula siguiendo la regla de Laplace, según:
+	 * <ul>
+	 * <li>Si la matriz tiene dimensión 0 (0 filas por 0 columnas), el determinante vale 1.</li>
+	 * <li>Si la matriz tiene dimensión mayor que cero, el determinante se calcula mediante el método de los adjuntos.
+	 * El adjunto de un elemento es el producto de:
+	 *      <ul>
+	 *      <li>el determinante de la matriz complementaria del elemento, </li>
+	 *      <li>por el valor del elemento</li>
+	 *      <li>por un factor de signo que vale (+1) si la paridad del índice de la fila y de la columna son iguales 
+	 *      <li>o (-1) si la paridad del índice de la fila y de la columna son distintos.</li>
+	 *      </ul>
+	 * El determinante de la matriz será igual al sumatorio de los adjuntos de los elementos de la primera fila.
+	 * </li>
+	 * </ul>
+	 * @return Determinante de la matriz dada por el método de la complementaria.
+	 * @see <a href="http://en.wikipedia.org/wiki/Laplace_expansion">Expansión de Laplace</a>
+	 */
+	public double determinante(){
+
+		if (this.getFila()==0||this.getColumna()==0) {
+			return 1;
+		} else {
+			double resultado = 0;
+			for (int i=0; i<this.getFila(); i++){
+				int j=0;
+				int signo;
+				if ((i+j)%2 == 0) {
+					signo = 1;
+				}else {
+					signo = -1;
+				}
+				resultado += signo * this.getMatriz()[i][j] * complementaria(i, j).determinante();
+			}
+			return resultado;
+		}
+	}
+
+	//Determinante por otro método
+	public Double determinante2(){
 		if(this.getFila()==this.getColumna()){
-			MatrizMath matrizAux=(MatrizMath)clone();//Casteo a Matriz de obj que devuelve el mï¿½todo clone.
-			double deter=1.0;
-			for(int k=0; k<dimension-1; k++){
-				for(int i=k+1; i<dimension; i++){
-					for(int j=k+1; j<dimension; j++){
-						matrizAux.matriz[i][j]-=matrizAux.matriz[i][k]*matrizAux.matriz[k][j]/matrizAux.matriz[k][k];
+			MatrizMath matrizAux=(MatrizMath)this.clone();//Casteo a Matriz de obj que devuelve el método clone.
+			double deter=1;
+			for(int k=0; k<this.getDimension()-1; k++){
+				for(int i=k+1; i<this.getDimension(); i++){
+					for(int j=k+1; j<this.getDimension(); j++){
+						matrizAux.getMatriz()[i][j]-=matrizAux.getMatriz()[i][k]*matrizAux.getMatriz()[k][j]/matrizAux.getMatriz()[k][k];
 					}
 				}
 			}
 
-			for(int i=0; i<dimension; i++){
-				deter*=matrizAux.matriz[i][i];
+			for(int i=0; i<this.getDimension(); i++){
+				deter*=matrizAux.getMatriz()[i][i];
 			}
 			return deter;
 		}else{System.out.println("No es una matriz cuadrada. No puede calcularse su determinante");
 		return null;}
 	}
 
+	///////////////*************//TRASPUESTA-COFACTORES-ADJUNTA//***************************/////////////////
+	public MatrizMath transponerMatriz(MatrizMath matriz) {
 
-	//matriz inversa
-	static MatrizMath inversa(MatrizMath matrizAInvertir){
-		if(matrizAInvertir.getFila()==matrizAInvertir.getColumna()){
-			if(matrizAInvertir.determinante()!=0){
-				int dimAux=matrizAInvertir.dimension;  //dimensiï¿½n de la matriz
-				MatrizMath matrizAux=(MatrizMath)matrizAInvertir.clone();
-				MatrizMath matrizIdentidad=new MatrizMath(dimAux);   //matriz de los tï¿½rminos independientes
-				MatrizMath matrizInversa=new MatrizMath(dimAux);   //matriz de las incï¿½gnitas
+		MatrizMath matrizTranspuesta = new MatrizMath(matriz.getDimension());
+		for(int i = 0; i < matriz.getFila(); i++){
+			for(int j = 0; j < matriz.getColumna(); j++) {
+				matrizTranspuesta.matriz[j][i] = matriz.matriz[i][j];
+			}
+		}
 
-				//generar matriz Identridad
-				for(int i=0; i<dimAux; i++){
-					matrizIdentidad.matriz[i][i]=1.0;
-				}
-				//transformaciï¿½n de la matriz y de los tï¿½rminos independientes
-				for(int k=0; k<dimAux-1; k++){
-					for(int i=k+1; i<dimAux; i++){
-						//tï¿½rminos independientes
-						for(int j=0; j<dimAux; j++){
-							matrizIdentidad.matriz[i][j]-=matrizAux.matriz[i][k]*matrizIdentidad.matriz[k][j]/matrizAux.matriz[k][k];
-						}
-						//elementos de la matriz
-						for(int j=k+1; j<dimAux; j++){
-							matrizAux.matriz[i][j]-=matrizAux.matriz[i][k]*matrizAux.matriz[k][j]/matrizAux.matriz[k][k];
+		return matrizTranspuesta;
+	}	
+
+	public MatrizMath calcularCofactoresMatriz(MatrizMath matriz){
+		MatrizMath mCofactor=new MatrizMath(matriz.getDimension());
+		for(int i=0;i<matriz.getFila();i++) {
+			for(int j=0;j<matriz.getColumna();j++) {
+				MatrizMath det= new MatrizMath(matriz.getDimension()-1);
+				Double detValor;
+				for(int k=0;k<matriz.getDimension();k++) {
+					if(k!=i) {
+						for(int l=0;l<matriz.getDimension();l++) {
+							if(l!=j) {
+								int indice1=k<i ? k : k-1 ;
+								int indice2=l<j ? l : l-1 ;
+								det.matriz[indice1][indice2]=matriz.matriz[k][l];
+							}
 						}
 					}
 				}
-				//calculo de las incognitas, elementos de la matriz inversa
-				for(int j=0; j<dimAux; j++){
-					matrizInversa.matriz[dimAux-1][j]=matrizIdentidad.matriz[dimAux-1][j]/matrizAux.matriz[dimAux-1][dimAux-1];
-					for(int i=dimAux-2; i>=0; i--){
-						matrizInversa.matriz[i][j]=matrizIdentidad.matriz[i][j]/matrizAux.matriz[i][i];
-						for(int k=dimAux-1; k>i; k--){
-							matrizInversa.matriz[i][j]-=matrizAux.matriz[i][k]*matrizInversa.matriz[k][j]/matrizAux.matriz[i][i];
+				detValor=matriz.determinante();
+				mCofactor.matriz[i][j]=detValor * (double)Math.pow(-1, i+j+2);
+			}
+		}
+		return mCofactor;
+	}
+
+	public MatrizMath calcularMatrizAdjunta(MatrizMath matriz){
+		return matriz.transponerMatriz(calcularCofactoresMatriz(matriz));
+	}
+
+	/////////////////*************//MATRIZ IDENTIDAD//*************///////////////////////
+	public MatrizMath matrizIdentidad(){
+		MatrizMath mIdent = new MatrizMath(this.getDimension());
+		for(int i=0; i<this.getDimension(); i++){
+			for(int j=0; j<this.getDimension(); j++){
+				mIdent.matriz[i][i]=1.0;
+			}//Fin inicializaciï¿½n de Matriz Cuadrada
+		}
+		return mIdent;
+	}
+
+	/////////////////**********//INVERSA//**********************///////////////////////
+	public MatrizMath matrizInversaPorAdjunta(MatrizMath matriz){
+		Double det=1/matriz.determinante();
+		MatrizMath adjunta=calcularMatrizAdjunta(matriz);
+		MatrizMath inversa= adjunta.productoPorEscalar(det);
+		return inversa;
+	}
+	
+
+	public MatrizMath matrizInversaPorGaussJordan(){
+		if(this.getFila()==this.getColumna()){
+			if(this.determinante2()!=0){
+				MatrizMath matrizAux=(MatrizMath)this.clone();
+				MatrizMath matrizIdentidad=this.matrizIdentidad();   //matriz de los términos independientes
+				MatrizMath matrizInversa=new MatrizMath(this.getDimension());   //matriz de las incógnitas
+
+				//transformación de la matriz y de los términos independientes
+				for(int k=0; k<this.getDimension()-1; k++){
+					for(int i=k+1; i<this.getDimension(); i++){
+						//términos independientes
+						for(int j=0; j<this.getDimension(); j++){
+							matrizIdentidad.getMatriz()[i][j]-=matrizAux.getMatriz()[i][k]*matrizIdentidad.getMatriz()[k][j]/matrizAux.getMatriz()[k][k];
+						}
+						//elementos de la matriz
+						for(int j=k+1; j<this.getDimension(); j++){
+							matrizAux.getMatriz()[i][j]-=matrizAux.getMatriz()[i][k]*matrizAux.getMatriz()[k][j]/matrizAux.getMatriz()[k][k];
+						}
+					}
+				}
+				//cálculo de las incógnitas, elementos de la matriz inversa
+				for(int j=0; j<this.getDimension(); j++){
+					matrizInversa.getMatriz()[this.getDimension()-1][j]=matrizIdentidad.getMatriz()[this.getDimension()-1][j]/matrizAux.getMatriz()[this.getDimension()-1][this.getDimension()-1];
+					for(int i=this.getDimension()-2; i>=0; i--){
+						matrizInversa.getMatriz()[i][j]=matrizIdentidad.getMatriz()[i][j]/matrizAux.getMatriz()[i][i];
+						for(int k=this.getDimension()-1; k>i; k--){
+							matrizInversa.getMatriz()[i][j]-=matrizAux.getMatriz()[i][k]*matrizInversa.getMatriz()[k][j]/matrizAux.getMatriz()[i][i];
 						}
 					}
 				}
@@ -339,22 +321,94 @@ public class MatrizMath implements Cloneable {
 			return null;}
 		}else{System.out.println("No es una matriz cuadrada. No puede calcularse su Inversa");
 		return null;}
-	}
-	
+	}	
 
-
-	//matriz traspuesta
-	static MatrizMath traspuesta(MatrizMath matrizATrasponer){
-		int n=matrizATrasponer.dimension;    //dimensiï¿½n
-		MatrizMath matrizTraspuesta=new MatrizMath(matrizATrasponer.dimension);
-		for(int i=0; i<n; i++){
-			for(int j=0; j<n; j++){
-				matrizTraspuesta.matriz[i][j]=matrizATrasponer.matriz[j][i];
+	//////////////******************//**SEL**//****************************///////////////////////
+	public VectorMath resolverSistemaEcuacionesLineales(MatrizMath matrizInversa, VectorMath terminosIndep){
+		System.out.println("\nResolviendo Sistema Ecuaciones Lineales....");
+		VectorMath vectorIncognitas= new VectorMath(terminosIndep.getDimensionVector());
+		for(int i=0; i<matrizInversa.getDimension(); i++){
+			for(int j=0; j<matrizInversa.getDimension(); j++){
+				vectorIncognitas.getVector()[i]+=matrizInversa.getMatriz()[i][j]*terminosIndep.getVector()[j];
 			}
 		}
-		return matrizTraspuesta;
+		return vectorIncognitas;
+	}
+
+	/////////////////**************//PRODUCTO ENTRE MATRICES//******************////////////////////
+	public MatrizMath productoEntreMatrices(MatrizMath b){
+		if(this.getColumna()==b.getFila()){
+			MatrizMath matrizProducto=new MatrizMath(this.getDimension());
+			for(int i=0; i<this.getDimension(); i++){
+				for(int j=0; j<this.getDimension(); j++){
+					for(int k=0; k<this.getDimension(); k++){
+						matrizProducto.getMatriz()[i][j]+=this.getMatriz()[i][k]*b.getMatriz()[k][j];
+					}
+				}
+			}
+			return matrizProducto;
+		}else{System.out.println("No es una matriz cuadrada. No puede calcularse su Producto");
+		return null;}
+	}
+
+	////////////////****************//RESTA - SUMA//*********************///////////////////
+	public MatrizMath restarMatrices(MatrizMath b){
+		if((this.getFila()==b.getFila())&&(this.getColumna()==b.getColumna())){
+			MatrizMath matrizResta=new MatrizMath(this.getDimension());//Llama al constructor que pide "dimension".
+			for(int i=0; i<this.getDimension(); i++){
+				for(int j=0; j<this.getDimension(); j++){
+					matrizResta.getMatriz()[i][j]=this.getMatriz()[i][j]-b.getMatriz()[i][j];
+				}
+			}
+			return matrizResta;
+		}else{System.out.println("Las matrices no tienen el mismo \"orden\". No puede calcularse su Resta");
+		return null;}
+	}
+
+	public MatrizMath sumarMatrices(MatrizMath b){
+		if((this.getFila()==b.getFila())&&(this.getColumna()==b.getColumna())){
+			MatrizMath matrizSuma=new MatrizMath(this.getDimension());//Llama al constructor que pide "dimension".
+			for(int i=0; i<this.getDimension(); i++){
+				for(int j=0; j<this.getDimension(); j++){
+					matrizSuma.getMatriz()[i][j]=this.getMatriz()[i][j]+b.getMatriz()[i][j];
+				}
+			}
+			return matrizSuma;
+		}else{System.out.println("Las matrices no tienen el mismo \"orden\". No puede calcularse su Resta");
+		return null;}
 	}
 	
+
+	/////////////******************//CALCULO DE ERROR//**************************///////////////////////
+	public Double calculoDeError(MatrizMath matriz){
+		Double error=0.0;
+		
+		try {
+			//					 System.out.println("m1= " + matriz.productoEntreMatrices(matriz.inversa()) +
+			//					 " - Esperado 10.77032961");
+			//					MatrizMath identidad= new MatrizMath(matriz.getDimension());
+			//					identidad.cargarMatriz();
+
+//			System.out.println("m2= " + this.matrizIdentidad().restarMatrices(matriz.productoEntreMatrices(matriz.matrizInversaPorGaussJordan())).normaDos()
+//					+ " - Esperado < 1E-12");
+
+			//					System.out.println("m2= " + (this.productoEntreMatrices(matriz.inversa()).resta(this.matrizIdentidad())).normaDos()
+			//							+ " - Esperado < 1E-12");
+			//					
+			//					System.out.println("m3= " + matriz3.getIdentidad().resta(matriz3.producto(matriz3.inversa())).normaDos()
+			//							+ " - Esperado < 1E-12");
+			//					System.out.println("m4= " + matriz4.getIdentidad().resta(matriz4.producto(matriz4.inversa())).normaDos()
+			//							+ " - Esperado < 1E-12");
+			//System.out.println(matriz.productoEntreMatrices(this.inversa()));
+            error=this.matrizIdentidad().restarMatrices(matriz.productoEntreMatrices(matriz.matrizInversaPorGaussJordan())).normaDos();
+            
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return error;
+	}
+
+	/////////////////*****************//NORMA//******************************//////////////////////
 	/**
 	 * Devuelve el valor ubicado en las posiciones indicadas por i y j
 	 * 
@@ -364,102 +418,59 @@ public class MatrizMath implements Cloneable {
 	 *            numero de columna
 	 * @return valor almacenado en (i,j)
 	 */
-	public double get(int i, int j) {
-		return matriz[i][j];
+	public double valorEnIndice(int i, int j){
+		return this.matriz[i][j];
 	}
-	
 
 	/**
 	 * Realiza la norma uno de la matriz (Suma absoluta de columnas)
 	 * 
 	 * @return (Suma absoluta de columnas)
 	 */
-	public double normaUno() {
-		double maximo = 0;
+	public double normaUno(){
+		double maximo=0;
 		double valor;
-		for (int j = 0; j < this.getFila(); j++) {
-			valor = 0;
-			for (int i = 0; i < this.getColumna(); i++) {
-				valor += Math.abs(get(i,j));
+		for (int j=0; j< this.getFila(); j++) {
+			valor=0;
+			for (int i=0; i<this.getColumna(); i++) {
+				valor += Math.abs(valorEnIndice(i,j));
 				if (valor > maximo)
-					maximo = valor;
+					maximo=valor;
 			}
 		}
 		return maximo;
 	}
-	
+
 	/**
 	 * Realiza la norma dos de la matriz, tambien llamada norma de Frobenius
 	 * 
 	 * @return
 	 */
 	public double normaDos() {
-		double resultado = 0;
-		for (int i = 0; i < this.getFila(); i++)
-			for (int j = 0; j < this.getColumna(); j++)
-				resultado += get(i, j) * get(i, j);
+		double resultado=0.0;
+		for (int i=0; i<this.getFila(); i++)
+			for (int j=0; j<this.getColumna(); j++)
+				resultado += valorEnIndice(i, j) * valorEnIndice(i, j);
 		return Math.sqrt(resultado);
 	}
-	
+
 	/**
 	 * Realiza la norma infinito de la matriz (Suma absoluta de filas)
 	 * 
 	 * @return (Suma absoluta de filas)
 	 */
 	public double normaInfinito() {
-		double maximo = 0;
+		double maximo=0;
 		double valor;
-		for (int i = 0; i < this.getFila(); i++) {
-			valor = 0;
-			for (int j = 0; j < this.getColumna(); j++) {
-				valor += Math.abs(get(i, j));
-				if (valor > maximo)
-					maximo = valor;
+		for (int i=0; i< this.getFila(); i++) {
+			valor=0;
+			for (int j=0; j<this.getColumna(); j++) {
+				valor += Math.abs(valorEnIndice(i, j));
+				if (valor>maximo)
+					maximo=valor;
 			}
 		}
 		return maximo;
 	}
-     
-	// Calculo de error
-	// ---------------------------------------------------------------------
-	public void calculoDeError(MatrizMath matriz){
-	try {
-				System.out.println("Calculo de error");
-				// System.out.println("m1= " + matriz1.producto(matriz4.inversa()) +
-				// " - Esperado 10.77032961");
-//				MatrizMath identidad= new MatrizMath(matriz.getDimension());
-//				identidad.cargarMatriz();
-				
-				
-//				System.out.println("m2= " + matriz2.getIdentidad().resta(matriz2.producto(matriz2.inversa())).normaDos()
-//						+ " - Esperado < 1E-12");
-								
-				//System.out.println("m2= " + (this.productoEntreMatrices(MatrizMath.inversa(matriz)).resta(this.matrizIdentidad())).normaDos()
-				//		+ " - Esperado < 1E-12");
-				
-//				System.out.println("m3= " + matriz3.getIdentidad().resta(matriz3.producto(matriz3.inversa())).normaDos()
-//						+ " - Esperado < 1E-12");
-//				System.out.println("m4= " + matriz4.getIdentidad().resta(matriz4.producto(matriz4.inversa())).normaDos()
-//						+ " - Esperado < 1E-12");
-				System.out.println(matriz.productoEntreMatrices(MatrizMath.inversa(matriz)));
-				
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-	}
-	
-	public String toString(){
-		String texto="\n";
-		for(int i=0; i<dimension; i++){
-			for(int j=0; j<dimension; j++){
-				texto+="\t "+(double)Math.round(1000*matriz[i][j])/1000;
-			}
-			texto+="\n";
-		}
-		texto+="\n";
-		return texto;
-	}
 
-}
-
+} 

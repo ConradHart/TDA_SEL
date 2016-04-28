@@ -8,12 +8,50 @@ import java.io.PrintWriter;
 
 public class Archivo {
 
-	private static String Resource1 = "Resources//Entrada//";
-	private static String Resource2 = "Resources//Entrada//";
-	private static String Resource3 = "Resources//Entrada//";
-	private static String Resource4 = "Resources//Entrada//04_caso2x2cCasiLDsimple.in";
-	private static String Resource5 = "Resources//Entrada//05_caso3x3.in";
 
+	private static String Resource1 = "Resources//Entrada//04_caso2x2cCasiLDsimple.in";
+	private static String Resource2 = "Resources//Entrada//05_caso3x3.in";
+	private static String ResourceSolucion = "Resources//Salida//solucion.out";
+	
+	private MatrizMath matriz;
+	private VectorMath vector;
+	private VectorMath incognitasResueltasAGrabar;
+	private Double errorCalculoSELaGrabar;
+	private Integer dimensionAGarabar;
+	
+	/////////////////////////////////////////////////////////////////////
+	public MatrizMath getMatriz() {
+		return matriz;
+	}
+	public void setMatriz(MatrizMath matriz) {
+		this.matriz = matriz;
+	}
+	public VectorMath getVector() {
+		return vector;
+	}
+	public void setVector(VectorMath vector) {
+		this.vector = vector;
+	}
+	public VectorMath getIncognitasResueltasAGrabar() {
+		return incognitasResueltasAGrabar;
+	}
+	public void setIncognitasResueltasAGrabar(VectorMath incognitasResueltasAGrabar) {
+		this.incognitasResueltasAGrabar = incognitasResueltasAGrabar;
+	}
+	public Double getErrorCalculoSELaGrabar() {
+		return errorCalculoSELaGrabar;
+	}
+	public void setErrorCalculoSELaGrabar(Double errorCalculoSELaGrabar) {
+		this.errorCalculoSELaGrabar = errorCalculoSELaGrabar;
+	}
+	public Integer getDimensionAGarabar() {
+		return dimensionAGarabar;
+	}
+	public void setDimensionAGarabar(Integer dimensionAGarabar) {
+		this.dimensionAGarabar = dimensionAGarabar;
+	}
+	///////////////////////////////////////////////////////////////////////
+	
 	public void leer() {
 		
 		File archivo = null;
@@ -23,7 +61,7 @@ public class Archivo {
 
 		try {
 
-			archivo = new File(Resource5);
+			archivo = new File(Resource2);
 			fr = new FileReader(archivo);
 			br = new BufferedReader(fr);
 			String linea = "";
@@ -39,45 +77,62 @@ public class Archivo {
 			MatrizMath Matriz = null;
 			VectorMath Vector = null;
 
-			String iFila = "";
-			String jColumna = "";
-			String eElemento = "";
+			int iFila = 0;
+			int jColumna = 0;
+			double eElemento = 0;
 			
 			
-			while ((linea = br.readLine()) != null){ //Primera lectura obtiene la dimension de la matriz y vector			
+			while ((linea = br.readLine()) != null){ //Primera lectura obtiene la dimension de la matriz y vector
 				lNumeroLineas++; //Contador de Lineas la primera lectura
 				if(PrimeraLinea == true){
+						this.setDimensionAGarabar(Integer.parseInt(linea));
 						System.out.println("La dimension de la matriz cuadrada es " + linea + "x" + linea);
 						System.out.println("La dimension del vector es " + linea);
 						lNumeroLineaFinMatriz = (long) (Integer.parseInt(linea)*(Integer.parseInt(linea)));//Numero de linea de fin elementos de la matriz
 						lNumeroLineaFinVector = lNumeroLineaFinMatriz + Integer.parseInt(linea);
 						PrimeraLinea = false;
 						
-						Matriz = new MatrizMath(Integer.parseInt(linea)); //Dimensiono la matriz
-						Vector = new VectorMath(Integer.parseInt(linea)); //Dimension el Vector
+						this.setMatriz(new MatrizMath(Integer.parseInt(linea))); //Dimensiono la matriz
+						this.setVector(new VectorMath(Integer.parseInt(linea))); //Dimensiono el vector
+						this.setIncognitasResueltasAGrabar(new VectorMath(Integer.parseInt(linea))); //Dimensiono el Vector de Incognitas Resueltas 
+						
+//						Matriz = new MatrizMath(Integer.parseInt(linea)); //Dimensiono la matriz
+//						Vector = new VectorMath(Integer.parseInt(linea)); //Dimension el vector
 						System.out.println("Matriz: ");
 						
 					}else{
 						
 						if(lNumeroLineas <= lNumeroLineaFinMatriz){ //Elementos de la matriz nxn	
-							linea = linea.replace(" ","");
-							iFila = linea.substring(0, 1);
-							jColumna = linea.substring(1, 2);
-							eElemento = linea.substring(2, 3);
+//							linea = linea.replace(" ","");
+//							iFila = linea.substring(0, 1);
+//							jColumna = linea.substring(1, 2);
+//							eElemento = linea.substring(2, 3);
+							
+							String[] lineaSpliteada = linea.split(" ");
+							iFila = Integer.parseInt(lineaSpliteada[0]);
+							jColumna = Integer.parseInt(lineaSpliteada[1]);
+							eElemento = Double.parseDouble(lineaSpliteada[2]);
 							
 							//Cargo matriz leida
-							Matriz.cargarMatrizArchivo(Integer.parseInt(iFila),Integer.parseInt(jColumna), Double.parseDouble(eElemento));
+//							Matriz.cargarMatrizArchivo(Integer.parseInt(iFila),Integer.parseInt(jColumna), Double.parseDouble(eElemento));						
+							this.getMatriz().cargarMatrizArchivo(iFila,jColumna,eElemento);
 							
 							System.out.println("Elemento i["+ iFila + "] j["+ jColumna +"]: " + eElemento);
 							
-							eElemento = "";
+//							eElemento = "";
 						}else{ //Elementos del vector
 							if(lNumeroLineas <= lNumeroLineaFinVector){ //Elementos del vector
-								linea = linea.replace(" ","");
-								eElemento = eElemento + linea;
+//								linea = linea.replace(" ","");
+//								eElemento = eElemento + linea;
+								
+//								linea = linea.replace(" ","");
+//								eElemento = linea;
+								eElemento = Double.parseDouble(linea);
 								
 								//Cargo el vector leido
-								Vector.cargarVectorArchivo(posVector, Double.parseDouble(eElemento));
+//								Vector.cargarVectorArchivo(posVector, Double.parseDouble(eElemento));
+								this.getVector().cargarVectorArchivo(posVector, eElemento);
+								
 								posVector++;
 								
 							}
@@ -87,22 +142,11 @@ public class Archivo {
 			}
 			
 			System.out.println("Vector: ["+ eElemento+"]");
-			System.out.println("Fin de lectura...");
+			this.getMatriz().imprimirMatriz();
+			this.getVector().imprimirVector();		
 			
-			Matriz.imprimirMatriz();
-			Vector.imprimirVector();
+			System.out.println("\nFin de lectura...");
 			
-			//Copiar esta matriz generada en la clase archivo a la clase MatrizMath para luego en test
-			//usar los metodos de MatrizMath como inversa, ya que la clase Archivo no los conoce
-
-			//Como copiar una matriz?
-//			//Constructor a partir de una Matriz Cuadrada 
-//			public MatrizMath(Double[][] otraMatriz) {
-//				this.matriz=otraMatriz;//Copia a matriz, la Matriz otraMatriz
-//				this.setDimension(otraMatriz.length);//Cargo dimension
-//				this.setFila(dimension);
-//				this.setColumna(dimension);
-//			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -116,20 +160,21 @@ public class Archivo {
 			}
 		}
 
-	}
+	}//fin leer
 	
-
 
 	public void escribir() {
 		FileWriter fichero = null;
 		PrintWriter pw = null;
 		try {
-			fichero = new FileWriter("F:/Workspace_Eclipse/Palindromo/bin/palindromo/Resources/palin.out");
+			fichero = new FileWriter(ResourceSolucion);
 			pw = new PrintWriter(fichero);
 
-			for (int i = 0; i < 10; i++)
-				pw.println("Linea " + i);
-
+			pw.println(this.getDimensionAGarabar());
+			pw.println(this.getIncognitasResueltasAGrabar());
+            pw.println(this.getErrorCalculoSELaGrabar());
+            
+            System.out.println("\nEl archivo solucion fue grabado con exito.");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -141,7 +186,7 @@ public class Archivo {
 				e2.printStackTrace();
 			}
 		}
-	}
+	}//fin escribir
 	
 
 }

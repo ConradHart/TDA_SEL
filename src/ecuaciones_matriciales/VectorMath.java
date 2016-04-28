@@ -13,14 +13,6 @@ public class VectorMath {
 	    	vector[i]=0.0;
 	}
 
-	//Cargar vector desde teclado
-//	public void cargarVector(){
-//		System.out.println("Tama�o del vector = " + dimensionVector);
-//		for(int i=0; i<vector.length; i++){
-//		    System.out.println("Ingrese elemento [" + i + "] = " );	
-//			vector[i]=MatrizMath.teclado.nextDouble();
-//		}
-//	}
 	
 	//Cargar Vector desde archivo
 	public void cargarVectorArchivo(Integer cCoordenada, Double cComponente){
