@@ -11,7 +11,12 @@ public class Archivo {
 
 	private static String Resource1 = "Resources//Entrada//04_caso2x2cCasiLDsimple.in";
 	private static String Resource2 = "Resources//Entrada//05_caso3x3.in";
+	private static String Resource3 = "Resources//Entrada//06_caso10x10.in";
+	private static String Resource4 = "Resources//Entrada//07_caso100x100.in";
+	private static String Resource5 = "Resources//Entrada//08_caso1000x1000.in";
+	private static String Resource6 = "Resources//Entrada//09_caso5000x5000.in";
 	private static String ResourceSolucion = "Resources//Salida//solucion.out";
+	private static String ResourceRandom = "Resources//Entrada//09_caso5000x5000.in";
 	
 	private MatrizMath matriz;
 	private VectorMath vector;
@@ -61,7 +66,7 @@ public class Archivo {
 
 		try {
 
-			archivo = new File(Resource2);
+			archivo = new File(Resource3);
 			fr = new FileReader(archivo);
 			br = new BufferedReader(fr);
 			String linea = "";
@@ -188,5 +193,40 @@ public class Archivo {
 		}
 	}//fin escribir
 	
+	public void escribirMatrizRandon(Integer dimension) {
+		FileWriter fichero = null;
+		PrintWriter pw = null;
+		Integer limite = 9;
+		try {
+			fichero = new FileWriter(ResourceRandom);
+			pw = new PrintWriter(fichero);
+			
+			pw.println(dimension);
+			
+			for(int i=0; i<dimension;i++){
+				for(int j=0; j<dimension; j++){
+					pw.println(i + " " + j + " " + (int) (Math.random()*limite+1));
+				}
+			}
+			
+			for(int i=0; i<dimension;i++){
+				pw.println((int) (Math.random()*limite+1));
+			}
+            
+            System.out.println("\nEl archivo random fue grabado con exito.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
 
+				if (null != fichero)
+					fichero.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+	}//fin escribir
+	
+
+	
 }

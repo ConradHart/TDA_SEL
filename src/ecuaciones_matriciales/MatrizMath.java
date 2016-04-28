@@ -325,7 +325,6 @@ public class MatrizMath implements Cloneable {
 
 	//////////////******************//**SEL**//****************************///////////////////////
 	public VectorMath resolverSistemaEcuacionesLineales(MatrizMath matrizInversa, VectorMath terminosIndep){
-		System.out.println("\nResolviendo Sistema Ecuaciones Lineales....");
 		VectorMath vectorIncognitas= new VectorMath(terminosIndep.getDimensionVector());
 		for(int i=0; i<matrizInversa.getDimension(); i++){
 			for(int j=0; j<matrizInversa.getDimension(); j++){
@@ -472,5 +471,6 @@ public class MatrizMath implements Cloneable {
 		}
 		return maximo;
 	}
+
 
 } 

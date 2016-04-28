@@ -10,6 +10,8 @@ public class Test {
 		  Archivo archivo1 = new Archivo();
 		  archivo1.leer(); //Lee y carga la matriz y el vector en memoria
 		  
+//		  archivo1.escribirMatrizRandon(5000);
+		  System.out.println("\nResolviendo Sistema Ecuaciones Lineales espere....");
 		  archivo1.setIncognitasResueltasAGrabar(archivo1.getMatriz().resolverSistemaEcuacionesLineales(archivo1.getMatriz().matrizInversaPorGaussJordan(), archivo1.getVector()));
 		  archivo1.setErrorCalculoSELaGrabar(archivo1.getMatriz().calculoDeError(archivo1.getMatriz()));
 		  
@@ -18,8 +20,8 @@ public class Test {
 		  Calendar tFin = new GregorianCalendar();
 	  
 	  long diff = tFin.getTimeInMillis() - tIni.getTimeInMillis();
-	  System.out.println("El rendimiento de algoritmos fue de: " + diff + " milisegundos");
-			  
+	  System.out.println("El rendimiento de algoritmos fue de: " + diff + " milisegundos." );
+	
 	  
 	}
 
